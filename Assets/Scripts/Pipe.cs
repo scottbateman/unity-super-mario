@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class Pipe : MonoBehaviour
 {
     public Transform connection;
-    public KeyCode enterKeyCode = KeyCode.S;
+    public string enterAxis = "Vertical";
+    public bool isRight = false;
+    
     public Vector3 enterDirection = Vector3.down;
     public Vector3 exitDirection = Vector3.zero;
 
@@ -12,10 +16,18 @@ public class Pipe : MonoBehaviour
     {
         if (connection != null && other.CompareTag("Player"))
         {
-            if (Input.GetKey(enterKeyCode) && other.TryGetComponent(out Player player)) {
+            bool enterPipe = canEnterPipe(isRight, Input.GetAxis(enterAxis));
+
+            if (enterPipe && other.TryGetComponent(out Player player)) {
                 StartCoroutine(Enter(player));
             }
         }
+    }
+
+    private bool canEnterPipe(bool isRight, float enterAxis){
+        if (isRight  && enterAxis > 0) return true; 
+        else if (!isRight && enterAxis <0) return true; 
+        else return false; 
     }
 
     private IEnumerator Enter(Player player)
