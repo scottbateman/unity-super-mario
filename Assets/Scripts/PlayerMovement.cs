@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private float inputAxis;
 
     public float moveSpeed = 4f;
+    public float moveSpeedRunMultiplier = 1.5f;
     public float maxJumpHeight = 5f;
     public float maxJumpTime = 1f;
     public float jumpForce => (2f * maxJumpHeight) / (maxJumpTime / 2f);
@@ -19,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public bool grounded { get; private set; }
     public bool jumping { get; private set; }
     public bool running => Mathf.Abs(velocity.x) > 0.25f || Mathf.Abs(inputAxis) > 0.25f;
+    public bool runningFast => running && Input.GetButton("Fire3");
     public bool sliding => (inputAxis > 0f && velocity.x < 0f) || (inputAxis < 0f && velocity.x > 0f);
     public bool falling => velocity.y < 0f && !grounded;
 
@@ -76,7 +78,18 @@ public class PlayerMovement : MonoBehaviour
     {
         // Accelerate / decelerate
         inputAxis = Input.GetAxis("Horizontal");
-        velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, moveSpeed * Time.deltaTime);
+
+        //multiplier if running
+        float multiplier = runningFast ? moveSpeedRunMultiplier : 1f;
+
+        //multiplier if sliding... slow down faster
+        if (sliding) {
+            multiplier = 2f;
+        }
+
+        velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed * multiplier, moveSpeed * multiplier * Time.deltaTime);
+
+        
 
         // Check if running into a wall
         if (rb.Raycast(Vector2.right * velocity.x)) {

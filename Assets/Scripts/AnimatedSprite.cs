@@ -5,6 +5,7 @@ public class AnimatedSprite : MonoBehaviour
 {
     public Sprite[] sprites;
     public float framerate = 1f / 6f;
+    public float baseFrameRate = 1f / 6f;
 
     private SpriteRenderer spriteRenderer;
     private int frame;

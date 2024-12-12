@@ -5,6 +5,7 @@ public class PlayerSpriteRenderer : MonoBehaviour
 {
     private PlayerMovement movement;
     public SpriteRenderer spriteRenderer { get; private set; }
+
     public Sprite idle;
     public Sprite jump;
     public Sprite slide;
@@ -18,6 +19,11 @@ public class PlayerSpriteRenderer : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (movement.runningFast) {
+            run.framerate = run.baseFrameRate * 1/2.5f;
+        } else {
+            run.framerate = run.baseFrameRate;
+        }
         run.enabled = movement.running;
 
         if (movement.jumping) {
