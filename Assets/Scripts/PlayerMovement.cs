@@ -84,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
 
         //multiplier if sliding... slow down faster
         if (sliding) {
-            multiplier = 2f;
+            multiplier = 3f;
         }
 
         velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed * multiplier, moveSpeed * multiplier * Time.deltaTime);
